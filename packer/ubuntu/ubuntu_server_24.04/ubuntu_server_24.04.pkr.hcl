@@ -7,18 +7,15 @@ packer {
   }
 }
 
-source "proxmox-iso" "ubuntu_server_24.04" {
+source "proxmox-iso" "ubuntu_server_2404" {
   proxmox_url              = var.proxmox_url
-  username                 = var.proxmox_api_username
-  token                    = var.proxmox_api_token
+  username                 = local.proxmox_api_username
+  token                    = local.proxmox_api_token
   insecure_skip_tls_verify = true
   node                     = "node1"
   vm_id                    = "1001"
-  vm_name                  = "ubuntu_server_24.04"
+  vm_name                  = "ubuntu-server-2404"
   template_description     = "Ubuntu Server Noble Numbat 24.04"
-  iso_url                  = var.iso_url
-  iso_storage_pool         = "local"
-  unmount_iso              = true
   template_name            = "packer-ubuntu-server-2404"
   qemu_agent               = true
   scsi_controller          = "virtio-scsi-pci"
@@ -32,6 +29,14 @@ source "proxmox-iso" "ubuntu_server_24.04" {
   ssh_username             = "ubuntu"
   ssh_password             = "ubuntu"
   ssh_timeout              = "30m"
+
+  boot_iso {
+    type = "scsi"
+    iso_url = var.iso_url
+    iso_storage_pool = "local"
+    iso_checksum = "file:http://releases.ubuntu.com/24.04/SHA256SUMS"
+    unmount = true
+  }
 
   disks {
     disk_size    = "20G"
@@ -57,9 +62,9 @@ source "proxmox-iso" "ubuntu_server_24.04" {
 }
 
 build {
-  name = "ubuntu_server_24.04"
+  name = "ubuntu_server_2404"
   sources = [
-    "proxmox-iso.ubuntu_server_24.04"
+    "proxmox-iso.ubuntu_server_2404"
   ]
 
   provisioner "shell" {
