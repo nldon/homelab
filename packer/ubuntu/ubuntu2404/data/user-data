@@ -6,7 +6,8 @@ autoinstall:
     layout: gb
   ssh:
     install-server: true
-    allow-pw: true
+    disable_root: true
+    ssh_quiet_keygen: true
     allow_public_ssh_keys: true
   packages:
     - qemu-guest-agent
@@ -17,12 +18,14 @@ autoinstall:
     swap:
       size: 0
   user-data:
-    package_upgrade: true
+    package_upgrade: false
     timezone: Europe/London
     users:
-      - name: ubuntu
-        passwd: "$6$rounds=4096$NTGzDJTj2zYDVNot$uxTW7/nN/zGpX6GKd7Pf1fhA4jAmMWsqW81.FwChCjMuE0UOcnIX6O6kOjTz4Yb4LDO50curRyLDOkPrfq0RK."
+      - name: packer
         groups: [adm, sudo]
         lock-passwd: false
         sudo: ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
+        ssh_authorized_keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILPg7d2pz/4nmo6iukGEeLk2/EVhgyWu7tsyiPYSMvDH
+          

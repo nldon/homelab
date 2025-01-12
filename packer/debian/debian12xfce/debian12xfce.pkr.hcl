@@ -15,9 +15,9 @@ source "proxmox-iso" "debian_12_xfce" {
   insecure_skip_tls_verify = true
 
   # Communicator settings
-  ssh_username         = "root"
-  ssh_password         = "packer"
-  ssh_timeout          = "60m"
+  ssh_username = "packer"
+  ssh_password = "packer"
+  ssh_timeout  = "60m"
 
   # Proxmox VM settings
   node                 = "node1"
@@ -38,7 +38,7 @@ source "proxmox-iso" "debian_12_xfce" {
   # Cloud-init settings
   cloud_init              = true
   cloud_init_storage_pool = "local-lvm"
-  http_directory          = "./"
+  http_directory          = "./data"
 
   # Boot settings
   boot      = "c"
@@ -51,7 +51,7 @@ source "proxmox-iso" "debian_12_xfce" {
   }
   boot_command = [
     "<esc><wait>",
-    "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/data/preseed.cfg",
+    "auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
     "<enter>"
   ]
 
@@ -63,7 +63,7 @@ source "proxmox-iso" "debian_12_xfce" {
 
   # Disk settings
   disks {
-    disk_size    = "30G"
+    disk_size    = "12G"
     format       = "raw"
     storage_pool = "local-lvm"
     type         = "virtio"
@@ -85,7 +85,7 @@ build {
   ]
 
   provisioner "file" {
-    destination      = "/etc/cloud/cloud.cfg"
-    source = "./data/cloud.cfg"
+    source      = "./data/99-datasource.cfg"
+    destination = "/etc/cloud/cloud.cfg.d/99-datasource.cfg"
   }
 }

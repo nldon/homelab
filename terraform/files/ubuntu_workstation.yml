@@ -1,0 +1,10 @@
+#cloud-config
+hostname: ${hostname}
+
+users:
+  - name: nld
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: [adm, sudo]
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ${ssh_key}

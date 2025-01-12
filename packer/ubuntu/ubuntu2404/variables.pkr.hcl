@@ -10,8 +10,14 @@ variable "proxmox_url" {
   default     = "https://10.3.2.43:8006/api2/json"
 }
 
-variable "iso_url" {
+variable "iso_file" {
   type        = string
-  description = "The URL of the ISO to use for the VM"
-  default     = "https://releases.ubuntu.com/24.04.1/ubuntu-24.04.1-live-server-amd64.iso"
+  description = "The path to the ISO file"
+  default     = "local:iso/ubuntu-24.04.1-live-server-amd64.iso"
+}
+
+variable "ssh_private_key_file" {
+  type        = string
+  description = "The path to the SSH private key file"
+  default     = "/home/nld/.ssh/packer_ed25519"
 }
