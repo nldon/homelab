@@ -10,8 +10,8 @@ packer {
 source "proxmox-iso" "ubuntu2404" {
   # Authentication
   proxmox_url              = var.proxmox_url
-  username                 = local.proxmox_api_username
-  token                    = local.proxmox_api_token
+  username                 = "root@pam"
+  password                 = local.proxmox_root_password
   insecure_skip_tls_verify = true
 
   # Communicator settings
@@ -21,10 +21,10 @@ source "proxmox-iso" "ubuntu2404" {
 
   # Proxmox VM settings
   node                 = "node1"
-  vm_id                = "1002"
+  vm_id                = "1001"
   vm_name              = "ubuntu-24-04"
   template_name        = "ubuntu-24-04"
-  template_description = "Ubuntu 24.04 - Noble Numbat - XFCE Desktop"
+  template_description = "Ubuntu 24.04 - Noble Numbat"
   qemu_agent           = true
 
   # VM Resources
@@ -37,7 +37,7 @@ source "proxmox-iso" "ubuntu2404" {
 
   # Cloud-init settings
   cloud_init              = true
-  cloud_init_storage_pool = "local-lvm"
+  cloud_init_storage_pool = "nfs-storage"
   http_directory          = "./data"
 
   # Boot settings
@@ -60,15 +60,18 @@ source "proxmox-iso" "ubuntu2404" {
 
   # Display settings
   vga {
-    type   = "virtio"
-    memory = 512
+    type = "virtio"
   }
+
+  serials = [
+    "socket"
+  ]
 
   # Disk settings
   disks {
     disk_size    = "20G"
     format       = "raw"
-    storage_pool = "local-lvm"
+    storage_pool = "nfs-storage"
     type         = "virtio"
   }
 
