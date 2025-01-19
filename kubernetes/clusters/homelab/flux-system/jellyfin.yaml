@@ -96,6 +96,13 @@ spec:
       labels:
         app: jellyfin
     spec:
+      volumes:
+      - name: nfs-jellyfin-config
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc-config
+      - name: nfs-jellyfin-data
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc-data
       containers:
       - name: jellyfin
         image: ghcr.io/linuxserver/jellyfin
@@ -132,13 +139,6 @@ spec:
         resources:
           limits:
             nvidia.com/gpu: "1"
-        volumes:
-        - name: nfs-jellyfin-config
-          persistentVolumeClaim:
-            claimName: jellyfin-pvc-config
-        - name: nfs-jellyfin-data
-          persistentVolumeClaim:
-            claimName: jellyfin-pvc-data
 
 ---
 apiVersion: v1
