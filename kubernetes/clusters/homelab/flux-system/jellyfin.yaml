@@ -1,0 +1,194 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jellyfin
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-pv-nfs-config
+  namespace: jellyfin
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /jellyfin/config
+    server: 10.3.2.104
+    readOnly: false
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jellyfin-pv-nfs-data
+  namespace: jellyfin
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /jellyfin/data
+    server: 10.3.2.104
+    readOnly: false
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-pvc-nfs-config
+  namespace: jellyfin
+spec:
+  storageClassName: ""
+  volumeName: jellyfin-pv-nfs-config
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-pvc-nfs-data
+  namespace: jellyfin
+spec:
+  storageClassName: ""
+  volumeName: jellyfin-pv-nfs-data
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+  labels:
+    app: jellyfin
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      volumes:
+      - name: nfs-jellyfin-config
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc-nfs-config
+      - name: nfs-jellyfin-data
+        persistentVolumeClaim:
+          claimName: jellyfin-pvc-nfs-data
+      containers:
+      - name: jellyfin
+        image: ghcr.io/linuxserver/jellyfin
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8096
+          name: http-tcp
+          protocol: TCP
+        - containerPort: 8920
+          name: https-tcp
+          protocol: TCP
+        - containerPort: 1900
+          name: dlna-udp
+          protocol: UDP
+        - containerPort: 7359
+          name: discovery-udp
+          protocol: UDP
+        env:
+        - name: JELLYFIN_PublishedServerUrl
+          value: 10.3.2.201
+        - name: PGID
+          value: "\x36\x35\x35\x34\x31"
+        - name: PUID
+          value: "\x31\x30\x34\x34"
+        - name: TZ
+          value: Europe/London
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumes:
+        - name: nfs-jellyfin-config
+          persistentVolumeClaim:
+            claimName: jellyfin-pvc-nfs-config
+        - name: nfs-jellyfin-data
+          persistentVolumeClaim:
+            claimName: jellyfin-pvc-nfs-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin-udp
+  namespace: jellyfin
+  annotations:
+    metallb.universe.tf/allow-shared-ip: jellyfin
+spec:
+  selector:
+    app: jellyfin
+  ports:
+    - name: dlna-udp
+      protocol: UDP
+      port: 1900
+      targetPort: 1900
+    - name: discovery-udp
+      protocol: UDP
+      port: 7359
+      targetPort: 7359
+  type: LoadBalancer
+  loadBalancerIP: 10.3.2.200
+  sessionAffinity: ClientIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin-tcp
+  namespace: jellyfin
+  annotations:
+    metallb.universe.tf/allow-shared-ip: jellyfin
+spec:
+  selector:
+    app: jellyfin
+  ports:
+    - name: http-tcp
+      protocol: TCP
+      port: 8096
+      targetPort: 8096
+    - name: https-tcp
+      protocol: TCP
+      port: 8920
+      targetPort: 8920
+  type: LoadBalancer
+  loadBalancerIP: 10.3.2.200
+  sessionAffinity: ClientIP
+
+---
+# TODO: Add Ingress for jellyfin
