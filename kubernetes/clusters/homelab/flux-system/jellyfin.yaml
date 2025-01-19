@@ -18,7 +18,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: /jellyfin/config
+    path: /mnt/nfs_share/jellyfin/config
     server: 10.3.2.104
     readOnly: false
 
@@ -36,7 +36,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    path: /jellyfin/data
+    path: /mnt/nfs_share/jellyfin/data
     server: 10.3.2.104
     readOnly: false
 
@@ -44,7 +44,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jellyfin-pvc-nfs-config
+  name: jellyfin-pvc-config
   namespace: jellyfin
 spec:
   storageClassName: ""
@@ -60,7 +60,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jellyfin-pvc-nfs-data
+  name: jellyfin-pvc-data
   namespace: jellyfin
 spec:
   storageClassName: ""
@@ -96,17 +96,15 @@ spec:
       labels:
         app: jellyfin
     spec:
-      volumes:
-      - name: nfs-jellyfin-config
-        persistentVolumeClaim:
-          claimName: jellyfin-pvc-nfs-config
-      - name: nfs-jellyfin-data
-        persistentVolumeClaim:
-          claimName: jellyfin-pvc-nfs-data
       containers:
       - name: jellyfin
         image: ghcr.io/linuxserver/jellyfin
         imagePullPolicy: Always
+        volumeMounts:
+        - name: nfs-jellyfin-config
+          mountPath: /config
+        - name: nfs-jellyfin-data
+          mountPath: /data
         ports:
         - containerPort: 8096
           name: http-tcp
@@ -137,10 +135,10 @@ spec:
         volumes:
         - name: nfs-jellyfin-config
           persistentVolumeClaim:
-            claimName: jellyfin-pvc-nfs-config
+            claimName: jellyfin-pvc-config
         - name: nfs-jellyfin-data
           persistentVolumeClaim:
-            claimName: jellyfin-pvc-nfs-data
+            claimName: jellyfin-pvc-data
 
 ---
 apiVersion: v1
