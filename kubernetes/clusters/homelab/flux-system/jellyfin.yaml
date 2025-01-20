@@ -96,6 +96,7 @@ spec:
       labels:
         app: jellyfin
     spec:
+      runtimeClassName: nvidia
       volumes:
       - name: nfs-jellyfin-config
         persistentVolumeClaim:
