@@ -4,4 +4,4 @@ resources:
 - metallb.yaml
 - jellyfin.yaml
 # - time-slice.yaml
-# - gpu-test.yaml
+- gpu-test.yaml

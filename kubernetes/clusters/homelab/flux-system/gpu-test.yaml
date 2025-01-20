@@ -9,7 +9,7 @@ spec:
   containers:
     - name: cuda-vector-add
       image: nvidia/cuda:12.3.2-base-ubuntu22.04
-      command: ["/usr/local/cuda/samples/1_Utilities/deviceQuery/deviceQuery"]
+      command: ["/bin/bash"]
       resources:
         limits:
           nvidia.com/gpu: 3
