@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: time-slicing-config-all
+  namespace: flux-system
 data:
   any: |-
     version: v1
