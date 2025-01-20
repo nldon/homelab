@@ -10,6 +10,7 @@ spec:
     - name: cuda-vector-add
       image: nvidia/cuda:12.3.2-base-ubuntu22.04
       command: ["/bin/bash"]
+      args: ["-c", "tail -f /dev/null"]
       resources:
         limits:
           nvidia.com/gpu: 3
