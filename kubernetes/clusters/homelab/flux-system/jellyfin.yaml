@@ -105,7 +105,7 @@ spec:
           claimName: jellyfin-pvc-data
       containers:
       - name: jellyfin
-        image: ghcr.io/linuxserver/jellyfin
+        image: lscr.io/linuxserver/jellyfin:latest
         imagePullPolicy: Always
         volumeMounts:
         - name: nfs-jellyfin-config
@@ -129,11 +129,13 @@ spec:
         - name: JELLYFIN_PublishedServerUrl
           value: 10.3.2.201
         - name: PGID
-          value: "\x36\x35\x35\x34\x31"
+          value: "1000"
         - name: PUID
-          value: "\x31\x30\x34\x34"
+          value: "1000"
         - name: TZ
           value: Europe/London
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: all
         securityContext:
           privileged: true
         resources:
