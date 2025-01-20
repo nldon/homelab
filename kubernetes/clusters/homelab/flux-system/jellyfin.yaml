@@ -109,7 +109,7 @@ spec:
         command: ["nvidia-smi"]
         resources:
           limits:
-            nvidia.com/gpu: "1"
+            nvidia.com/gpu: 1
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:latest
@@ -147,7 +147,7 @@ spec:
           privileged: true
         resources:
           limits:
-            nvidia.com/gpu: "1"
+            nvidia.com/gpu: 1
 
 ---
 apiVersion: v1
