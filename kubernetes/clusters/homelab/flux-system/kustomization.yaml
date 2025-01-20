@@ -2,4 +2,4 @@ resources:
 - gotk-components.yaml
 - gotk-sync.yaml
 - metallb.yaml
-# - jellyfin.yaml
+- jellyfin.yaml

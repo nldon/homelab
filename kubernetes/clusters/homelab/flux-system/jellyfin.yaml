@@ -103,6 +103,13 @@ spec:
       - name: nfs-jellyfin-data
         persistentVolumeClaim:
           claimName: jellyfin-pvc-data
+      initContainers:
+      - name: gpu-check
+        image: nvidia/cuda:12.3.2-base-ubuntu22.04
+        command: ["nvidia-smi"]
+        resources:
+          limits:
+            nvidia.com/gpu: "1"
       containers:
       - name: jellyfin
         image: lscr.io/linuxserver/jellyfin:latest
