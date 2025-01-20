@@ -4,11 +4,11 @@ metadata:
   name: gpu-operator-test
   namespace: jellyfin
 spec:
+  runtimeClassName: nvidia
   restartPolicy: OnFailure
   containers:
     - name: cuda-vector-add
-      # https://catalog.ngc.nvidia.com/orgs/nvidia/teams/k8s/containers/cuda-sample
-      image: "nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda11.7.1-ubuntu20.04"
+      image: nvidia/cuda:12.3.2-base-ubuntu22.04
       resources:
         limits:
           nvidia.com/gpu: 3
