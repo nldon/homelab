@@ -156,9 +156,8 @@ kind: Service
 metadata:
   name: jellyfin-udp
   namespace: jellyfin
-  annotations:
-    metallb.universe.tf/allow-shared-ip: jellyfin
 spec:
+  type: LoadBalancer
   selector:
     app: jellyfin
   ports:
@@ -170,9 +169,6 @@ spec:
       protocol: UDP
       port: 7359
       targetPort: 7359
-  type: LoadBalancer
-  loadBalancerIP: 10.3.2.200
-  sessionAffinity: ClientIP
 
 ---
 apiVersion: v1
@@ -180,9 +176,8 @@ kind: Service
 metadata:
   name: jellyfin-tcp
   namespace: jellyfin
-  annotations:
-    metallb.universe.tf/allow-shared-ip: jellyfin
 spec:
+  type: LoadBalancer
   selector:
     app: jellyfin
   ports:
@@ -194,9 +189,6 @@ spec:
       protocol: TCP
       port: 8920
       targetPort: 8920
-  type: LoadBalancer
-  loadBalancerIP: 10.3.2.200
-  sessionAffinity: ClientIP
 
 ---
 # TODO: Add Ingress for jellyfin
