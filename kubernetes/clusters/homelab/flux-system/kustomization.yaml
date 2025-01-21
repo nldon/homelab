@@ -1,7 +1,7 @@
 resources:
 - gotk-components.yaml
 - gotk-sync.yaml
-- metallb.yaml
+# - metallb.yaml
 - jellyfin.yaml
 # - time-slice.yaml
 - gpu-test.yaml
