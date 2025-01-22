@@ -1,3 +1,4 @@
 downloaded_iso_path/
 .terraform*
 *.tfstate*
+*.cfg

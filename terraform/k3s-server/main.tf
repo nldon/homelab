@@ -27,8 +27,8 @@ resource "null_resource" "k3s_server_cloud_init" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo mv /tmp/k3s_server.yml /var/lib/vz/snippets/k3s_server.yml",
-      "sudo chown root:root /var/lib/vz/snippets/k3s_server.yml"
+      "sudo mv /tmp/k3s_server.yml /mnt/nfs_share/snippets/k3s_server.yml",
+      "sudo chown root:root /mnt/nfs_share/snippets/k3s_server.yml"
     ]
   }
 }
