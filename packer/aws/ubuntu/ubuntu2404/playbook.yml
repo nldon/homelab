@@ -1,0 +1,17 @@
+---
+
+- name: Test playbook for packer provisioning
+  hosts: default
+
+  tasks:
+    - name: Install packages
+      become: true
+      ansible.builtin.package:
+        name: "{{ package }}"
+        state: present
+      loop:
+        - curl
+        - vim
+        - haveged
+      loop_control:
+        loop_var: package
