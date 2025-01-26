@@ -4,27 +4,31 @@ packer {
       version = "~> 1"
       source  = "github.com/hashicorp/proxmox"
     }
+    ansible = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/ansible"
+    }
   }
 }
 
-source "proxmox-iso" "ubuntu2404" {
+source "proxmox-iso" "k3s-server-ubuntu-24-04" {
   # Authentication
   proxmox_url              = var.proxmox_url
-  username                 = "root@pam"
-  password                 = local.proxmox_root_password
+  username                 = local.proxmox_username
+  password                 = local.proxmox_password
   insecure_skip_tls_verify = true
 
   # Communicator settings
   ssh_username         = "packer"
   ssh_private_key_file = var.ssh_private_key_file
-  ssh_timeout          = "60m"
+  ssh_timeout          = "30m"
 
   # Proxmox VM settings
   node                 = "node1"
   vm_id                = "1001"
-  vm_name              = "ubuntu-24-04"
-  template_name        = "ubuntu-24-04"
-  template_description = "Ubuntu 24.04 - Noble Numbat"
+  vm_name              = "k3s-server-ubuntu-24-04"
+  template_name        = "k3s-server-ubuntu-24-04"
+  template_description = "K3s Server running on Ubuntu 24.04"
   qemu_agent           = true
 
   # VM Resources
@@ -84,9 +88,9 @@ source "proxmox-iso" "ubuntu2404" {
 }
 
 build {
-  name = "ubuntu-24-04"
+  name = "k3s-server-ubuntu-24-04"
   sources = [
-    "source.proxmox-iso.ubuntu2404"
+    "source.proxmox-iso.k3s-server-ubuntu-24-04"
   ]
 
   provisioner "shell" {
@@ -116,5 +120,9 @@ build {
       "sudo mv /tmp/99-datasource.cfg /etc/cloud/cloud.cfg.d/99-datasource.cfg",
       "sudo chmod 0644 /etc/cloud/cloud.cfg.d/99-datasource.cfg"
     ]
+  }
+
+  provisioner "ansible" {
+    playbook_file = "${path.root}/../../../../ansible/playbook.yml"
   }
 }
