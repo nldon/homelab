@@ -4,5 +4,7 @@
   hosts: all
 
   roles:
+    - upgrade_system
     - remove_default_accounts
+    - add_user_accounts
     - k3_server
