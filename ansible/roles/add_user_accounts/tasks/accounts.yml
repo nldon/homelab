@@ -1,0 +1,24 @@
+---
+
+- name: Add user accounts from vault file
+  become: true
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    comment: "{{ user.comment }}"
+    shell: "{{ user.shell }}"
+    groups: "{{ user.groups }}"
+    append: true
+    password: "{{ user.password }}"
+    expires: -1
+  loop: "{{ user_accounts }}"
+  loop_control:
+    loop_var: user
+
+- name: Add SSH authorized keys for user accounts
+  become: true
+  ansible.posix.authorized_key:
+    user: "{{ user.name }}"
+    key: "{{ user.ssh_keys | join('\n') }}"
+    exclusive: true
+    state: present
+  loop: "{{ user_accounts }}"
