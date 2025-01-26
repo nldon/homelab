@@ -42,7 +42,7 @@ source "proxmox-iso" "k3s-server-ubuntu-24-04" {
   # Cloud-init settings
   cloud_init              = true
   cloud_init_storage_pool = "nfs-storage"
-  http_directory          = "./data"
+  http_directory          = "${path.root}/data"
 
   # Boot settings
   boot      = "c"
@@ -110,7 +110,7 @@ build {
 
   # Cant move directly to root owned locations with this provisioner
   provisioner "file" {
-    source      = "./files/99-datasource.cfg"
+    source      = "${path.root}/files/99-datasource.cfg"
     destination = "/tmp/99-datasource.cfg"
   }
 
@@ -123,6 +123,6 @@ build {
   }
 
   provisioner "ansible" {
-    playbook_file = "${path.root}/../../../../ansible/playbook.yml"
+    playbook_file = "${path.root}/../../../../ansible/k3_server.yml"
   }
 }

@@ -1,8 +1,9 @@
 locals {
-  credentials           = jsondecode(file("/opt/credentials/packer.json"))
-  proxmox_api_username  = local.credentials.proxmox_api_username
-  proxmox_api_token     = local.credentials.proxmox_api_token
-  proxmox_root_password = local.credentials.proxmox_root_password
+  credentials          = jsondecode(file("/opt/credentials/packer.json"))
+  proxmox_username     = local.credentials.proxmox_username
+  proxmox_password     = local.credentials.proxmox_password
+  proxmox_api_username = local.credentials.proxmox_api_username
+  proxmox_api_token    = local.credentials.proxmox_api_token
 }
 
 variable "proxmox_url" {

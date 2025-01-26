@@ -17,12 +17,6 @@ autoinstall:
       name: direct
     swap:
       size: 0
-  network:
-    version: 2
-    ethernets:
-      match:
-        name: en*s0
-      dhcp4: true
   user-data:
     package_upgrade: false
     timezone: Europe/London
