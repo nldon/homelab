@@ -1,0 +1,13 @@
+---
+
+- name: Remove default Linux distribution accounts
+  ansible.builtin.user:
+    name: "{{ user }}"
+    state: absent
+  loop:
+    - ubuntu
+    - centos
+    - fedora
+    - debian
+  loop_control:
+    loop_var: user

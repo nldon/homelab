@@ -1,0 +1,8 @@
+---
+
+- name: Include tasks to remove build accounts
+  ansible.builtin.include_tasks: "{{ task }}"
+  loop:
+    - remove_accounts.yml
+  loop_control:
+    loop_var: task
