@@ -1,0 +1,7 @@
+---
+
+- name: Upgrade the operating system (Debian-based)
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist

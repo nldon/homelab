@@ -1,0 +1,8 @@
+---
+
+- name: Include tasks to upgrade operating system
+  ansible.builtin.include_tasks: "{{ task }}"
+  loop:
+    - upgrade_system.yml
+  loop_control:
+    loop_var: task
