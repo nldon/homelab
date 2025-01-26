@@ -1,0 +1,7 @@
+---
+
+- name: Playbook to provision K3s server on Ubuntu 24.04
+  hosts: all
+
+  roles:
+    - k3_server

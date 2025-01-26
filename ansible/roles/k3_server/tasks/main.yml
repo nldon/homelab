@@ -1,0 +1,8 @@
+---
+
+- name: Include tasks to install K3s server
+  ansible.builtin.include_tasks: "{{ task }}"
+  loop:
+    - install.yml
+  loop_control:
+    loop_var: task

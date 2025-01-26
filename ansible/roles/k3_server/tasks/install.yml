@@ -1,0 +1,11 @@
+---
+
+- name: Install K3s server
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/install_k3s.sh
+    mode: "0755"
+
+- name: Run K3s server installer
+  ansible.builtin.command: /tmp/install_k3s.sh
+  changed_when: false
