@@ -123,6 +123,9 @@ build {
   }
 
   provisioner "ansible" {
+    ansible_env_vars = [ "SOPS_AGE_KEY=${var.sops_age_key}" ]
+    command = "${path.root}/../../../files/scripts/sops_wrapper.sh"
     playbook_file = "${path.root}/../../../../ansible/k3_server.yml"
+    extra_arguments = [ "-vv" ]
   }
 }

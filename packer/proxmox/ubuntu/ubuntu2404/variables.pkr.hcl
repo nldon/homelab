@@ -1,5 +1,5 @@
 locals {
-  credentials          = jsondecode(file("/opt/credentials/packer.json"))
+  credentials          = jsondecode(file("~/.config/credentials/packer.json"))
   proxmox_username     = local.credentials.proxmox_username
   proxmox_password     = local.credentials.proxmox_password
   proxmox_api_username = local.credentials.proxmox_api_username
@@ -23,3 +23,9 @@ variable "ssh_private_key_file" {
   description = "The path to the SSH private key file"
   default     = "/home/nld/.ssh/packer_ed25519"
 }
+
+variable "sops_age_key" {
+  type        = string
+  description = "SOPS_AGE_KEY environment variable to decrypt secrets"
+}
+
