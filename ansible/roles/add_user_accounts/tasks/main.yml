@@ -3,6 +3,6 @@
 - name: Include tasks to add user accounts from vault
   ansible.builtin.include_tasks: "{{ task }}"
   loop:
-    - add_user_accounts.yml
+    - accounts.yml
   loop_control:
     loop_var: task
