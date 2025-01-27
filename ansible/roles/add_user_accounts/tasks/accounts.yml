@@ -22,3 +22,5 @@
     exclusive: true
     state: present
   loop: "{{ user_accounts }}"
+  loop_control:
+    loop_var: user
