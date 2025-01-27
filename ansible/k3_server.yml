@@ -3,8 +3,11 @@
 - name: Playbook to provision K3s server on Ubuntu 24.04
   hosts: all
 
+  vars_files:
+    - vault/vault.yml
+
   roles:
-    - upgrade_system
+    # - upgrade_system
     - remove_default_accounts
     - add_user_accounts
     - k3_server
